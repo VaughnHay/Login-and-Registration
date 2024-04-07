@@ -13,6 +13,15 @@ const session = require("express-session")
 const { name } = require("ejs")
 const methodOverride = require("method-override")
 
+//supabase configuration
+const { createClient } = require('@supabase/supabase-js');
+const supabaseUrl = 'https://llfhkqdenvzoutfuqglg.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsZmhrcWRlbnZ6b3V0ZnVxZ2xnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMTExMjUsImV4cCI6MjAyNzc4NzEyNX0.cJBk8QaFjwAPUd6Q93Ipti5dG2U-p_flNQYHfDk_SAY'
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+
+
 initializePassport(
     passport,
     email => users.find(user => user.email === email),
@@ -32,6 +41,42 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride("_method"))
+
+// User registration endpoint
+app.post("/register", checkNotAuthenticated, async (req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10); // Hash the password
+
+        // Insert user data into Supabase
+        const { data, error } = await supabase
+            .from('users')
+            .insert([
+                {
+                    username: req.body.name,
+                    email: req.body.email,
+                    password: hashedPassword,
+                },
+            ]);
+
+        if (error) {
+            console.error(error);
+            return res.status(500).send('Error registering user');
+        }
+
+        console.log('User registered:', data);
+        res.redirect("/login");
+    } catch (e) {
+        console.error(e);
+        res.redirect("/register");
+    }
+});
+
+// Login endpoint
+app.post("/login", checkNotAuthenticated, passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true
+}));
 
 
 //post
