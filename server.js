@@ -11,7 +11,7 @@ const passport = require("passport")
 const flash = require("express-flash")
 const session = require("express-session")
 const { name } = require("ejs")
-
+const methodOverride = require("method-override")
 
 initializePassport(
     passport,
@@ -31,6 +31,8 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(methodOverride("_method"))
+
 
 //post
 app.post("/login",checkNotAuthenticated, passport.authenticate("local", {
@@ -71,6 +73,12 @@ app.get('/register' ,checkNotAuthenticated, (req,res) => {
 })
 //End Routes
 
+app.delete("/logout", (req, res) =>{
+    req.logOut(req.user,err =>{
+        if(err) return next(err)
+        res.redirect("/")
+    })
+})
 //once user is logged in the cant go back to the login page 
 function checkAuthenticated(req,res,next){
     if(req.isAuthenticated()){
