@@ -138,4 +138,15 @@ function checkNotAuthenticated(req,res,next){
     }
     next()
 }
+
+function togglePassword() {
+    const passwordField = document.getElementById('password');
+    const showPasswordCheckbox = document.getElementById('showPassword');
+
+    if (showPasswordCheckbox.checked) {
+        passwordField.type = 'text'; // Show password
+    } else {
+        passwordField.type = 'password'; // Hide password
+    }
+}
 app.listen(3000)
