@@ -8,16 +8,19 @@
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script>
-      function togglePassword() {
-          const passwordField = document.getElementById('form3Example4');
-          const showPasswordCheckbox = document.getElementById('showPassword');
+      
+        function togglePassword() {
+            const passwordField = document.getElementById('form3Example4');
+            const showPasswordCheckbox = document.getElementById('showPassword');
 
-          if (showPasswordCheckbox.checked) {
-              passwordField.type = 'text'; // Show password
-          } else {
-              passwordField.type = 'password'; // Hide password
-          }
-      }
+            if (showPasswordCheckbox.checked) {
+                passwordField.type = 'text'; // Show password
+            } else {
+                passwordField.type = 'password'; // Hide password
+            }
+        }
+    </script>
+
   </script> 
 </head>
   
@@ -124,12 +127,13 @@
                   <input type="password" name="password" id="form3Example4" class="form-control" />
                   <label class="form-label" for="form3Example4">Password</label>
                   <div class="show-password">
-                    <input type="checkbox" id="showPassword" />
+                    <input type="checkbox" id="showPassword" onclick="togglePassword()" style="margin-left: 10px;">
                     <label for="showPassword">Show Password</label>
                   </div>
                 </div>
   
-  
+              
+
                 <!-- Submit button -->
                 <button type="submit" class="btn btn-primary btn-block mb-4">
                   Sign In
